@@ -38,9 +38,9 @@
 ```
 
 ### `tg-exporter auth export-session`
-Экспортировать сессию в secrets.env для CI/CD.
+Экспортировать сессию в secrets.exported.env для CI/CD.
 ```
---output TEXT      Путь к выходному файлу (default: secrets.env)
+--output TEXT      Путь к выходному файлу (default: secrets.exported.env)
 ```
 
 ### `tg-exporter auth verify`

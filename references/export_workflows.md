@@ -136,8 +136,8 @@ tg-exporter export run --chat @channel_name --resume
 ## CI/CD сценарий
 
 ```bash
-# 1. Загрузить сессию из secrets.env (должен быть предварительно создан)
-export $(cat secrets.env | xargs)
+# 1. Загрузить сессию из secrets.exported.env (должен быть предварительно создан)
+export $(cat secrets.exported.env | xargs)
 
 # 2. Проверить что сессия валидна
 tg-exporter auth verify

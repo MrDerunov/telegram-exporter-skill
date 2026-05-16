@@ -60,15 +60,15 @@ tg-exporter profile list
 tg-exporter auth login
 
 # 2. Экспортировать сессию
-tg-exporter auth export-session --output secrets.env
-# → создаст secrets.env с TG_EXPORTER_API_ID, TG_EXPORTER_API_HASH, TG_EXPORTER_SESSION
+tg-exporter auth export-session --output secrets.exported.env
+# → создаст secrets.exported.env с TG_EXPORTER_API_ID, TG_EXPORTER_API_HASH, TG_EXPORTER_SESSION
 
-# 3. В CI передать содержимое secrets.env как переменные окружения
+# 3. В CI передать содержимое secrets.exported.env как переменные окружения
 # 4. Проверить валидность сессии
 tg-exporter auth verify
 ```
 
-⚠️ `secrets.env` содержит полный доступ к аккаунту Telegram. Хранить в безопасном месте, не коммитить в репозиторий.
+⚠️ `secrets.exported.env` содержит полный доступ к аккаунту Telegram. Хранить в безопасном месте, не коммитить в репозиторий.
 
 ## Диагностика проблем
 
