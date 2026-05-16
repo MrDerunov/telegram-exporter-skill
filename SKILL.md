@@ -3,7 +3,7 @@ name: telegram-exporter
 description: >-
   Export Telegram channel/chat messages to JSON and Markdown using the tg-exporter CLI.
   Use when the user asks to export Telegram data, backup chats, download Telegram messages, extract chat history,
-  save Telegram media, transcribe voice messages, or collect analytics from Telegram channels.
+  save Telegram media or collect analytics from Telegram channels.
   Also use when the user mentions "telegram exporter", "export chat", "backup telegram", "download from telegram",
   "save messages", "archive channel", or "tg-exporter".
 metadata:
@@ -156,7 +156,6 @@ tg-exporter doctor
 - Файлы экспорта могут содержать личные данные. Не отправлять их содержимое в LLM-контекст без явного запроса пользователя.
 
 ### Технические ограничения
-- Для работы из РФ требуется VPN с полным туннелированием
 - Экспорт больших каналов может занять часы и десятки гигабайт
 - `--last` несовместим с фильтрами по дате
 - `--days` несовместим с `--date-from/--date-to`
