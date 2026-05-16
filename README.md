@@ -25,7 +25,6 @@ openclaw skill install MrDerunov/telegram-exporter-skill
 
 - Утилита [tg-exporter](https://github.com/MrDerunov/telegram-exporter) (скачивается автоматически при первом использовании скилла)
 - Учётная запись Telegram с API ID и API Hash (my.telegram.org)
-- Для работы из РФ — VPN с полным туннелированием
 
 ## Структура
 
