@@ -72,7 +72,9 @@ def package_skill(skill_path, output_dir=None):
 
     skill_filename = output_path / f"{skill_name}.skill"
 
-    EXCLUDED_DIRS = {".git", ".svn", ".hg", "__pycache__", "node_modules"}
+    EXCLUDED_DIRS = {".git", ".svn", ".hg", "__pycache__", "node_modules", ".github"}
+    # Файлы репозитория, не относящиеся к скиллу
+    EXCLUDED_FILES = {"README.md", ".gitignore", "LICENSE"}
 
     # Create the .skill file (zip format)
     try:
@@ -89,6 +91,8 @@ def package_skill(skill_path, output_dir=None):
                     continue
 
                 if file_path.is_file():
+                    if file_path.name in EXCLUDED_FILES:
+                        continue
                     resolved_file = file_path.resolve()
                     if not _is_within(resolved_file, skill_path):
                         print(f"[ERROR] File escapes skill root: {file_path}")
