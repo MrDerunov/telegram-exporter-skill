@@ -1,171 +1,132 @@
 ---
 name: telegram-exporter
 description: >-
-  Export Telegram channel/chat messages to JSON and Markdown using the tg-exporter CLI.
+  Export Telegram channel/chat messages to JSON and Markdown using the Telegram Exporter desktop app.
   Use when the user asks to export Telegram data, backup chats, download Telegram messages, extract chat history,
-  save Telegram media or collect analytics from Telegram channels.
+  save Telegram media, collect analytics from Telegram channels, or transcribe voice messages.
   Also use when the user mentions "telegram exporter", "export chat", "backup telegram", "download from telegram",
   "save messages", "archive channel", or "tg-exporter".
 metadata:
   openclaw:
     emoji: "📦"
     requires:
-      bins: ["tg-exporter"]
+      bins: []
     install:
-      - id: script
-        kind: script
-        script: scripts/install_tg_exporter.sh
-        label: Install tg-exporter (GitHub Releases)
-      - id: manual
+      - id: download
         kind: manual
         label: Download from https://github.com/MrDerunov/telegram-exporter/releases
 ---
 
 # Telegram Exporter Skill
 
-Экспорт чатов и каналов Telegram в JSON и Markdown через CLI-утилиту `tg-exporter`.
+Десктопное приложение для экспорта чатов и каналов Telegram в JSON и Markdown.
+С транскрипцией голосовых, скачиванием медиа и поддержкой нескольких аккаунтов.
 
-## First-Run Check
+## Быстрый старт
 
-При первом использовании проверить готовность окружения:
+1. Скачать бинарник под свою ОС с [GitHub Releases](https://github.com/MrDerunov/telegram-exporter/releases)
+2. Запустить приложение
+3. Ввести API ID и API Hash (получить на [my.telegram.org](https://my.telegram.org) → API development tools)
+4. Войти в аккаунт Telegram (номер → код → 2FA если есть)
+5. Выбрать чат, настроить параметры экспорта, нажать «Экспорт»
 
-```bash
-# 1. Установлена ли утилита?
-which tg-exporter || bash scripts/install_tg_exporter.sh
+## Установка
 
-# 2. Пройти диагностику
-tg-exporter doctor
-```
+### Готовые сборки
 
-Если `doctor` показывает проблемы — сообщить пользователю что нужно исправить.
+Скачай с [Releases](https://github.com/MrDerunov/telegram-exporter/releases) файл под свою ОС:
 
-**Критичные проверки:**
-- `tg-exporter` доступен в PATH
-- Сессия валидна (`tg-exporter auth status`)
-- Есть свободное место на диске
-- (опционально) `ffmpeg` для транскрипции
+| Платформа | Файл |
+|-----------|------|
+| **macOS Apple Silicon (M1/M2/M3/M4)** | `TelegramExporter-mac-arm64.dmg` |
+| **macOS Intel** | `TelegramExporter-mac-intel.dmg` |
+| **Windows** | `TelegramExporterSetup.exe` |
+| **Linux (x86_64)** | `TelegramExporter-linux-x86_64.tar.gz` |
 
-## Если утилита не установлена
+- **macOS**: открыть DMG, перетащить приложение в Applications
+- **Windows**: запустить установщик
+- **Linux**: распаковать архив и запустить бинарник внутри
 
-```bash
-bash scripts/install_tg_exporter.sh
-```
-
-Скачивает последнюю версию из GitHub Releases для текущей OS/arch в `~/.local/bin`.
-
-Или вручную:
-1. Открыть https://github.com/MrDerunov/telegram-exporter/releases
-2. Скачать архив под свою платформу
-3. Распаковать, переместить `tg-exporter` в `~/.local/bin`
-
-## Если не авторизован
+### Из исходников
 
 ```bash
-tg-exporter auth login
+git clone https://github.com/MrDerunov/telegram-exporter.git
+cd telegram-exporter
+python3 -m venv .venv
+source .venv/bin/activate          # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+python main.py
 ```
 
-Интерактивно запрашивает API ID, API Hash, номер телефона, код из Telegram.
-Подробнее: [references/auth_guide.md](references/auth_guide.md).
+Требуется Python 3.11+.
 
-## Экспорт
+## Первый запуск
 
-### Быстрый старт
+1. Получить `api_id` и `api_hash` на [my.telegram.org](https://my.telegram.org) → API development tools
+2. Ввести их в окне логина приложения
+3. Ввести номер телефона → код из Telegram → (если есть) пароль 2FA
+4. После входа можно добавить ещё аккаунты через кнопку **«Аккаунт ▾»** в шапке
 
-```bash
-# Экспорт канала по username
-tg-exporter export run --chat @channel_name
+> **Если из РФ и не приходит код / «Ошибка соединения»** — включи VPN. Приложение ходит напрямую к серверам Telegram, их IP в России заблокированы. Нужен VPN с полным туннелированием трафика (AmneziaVPN, Outline, WireGuard).
 
-# Экспорт по ID
-tg-exporter export run --chat -1001234567890
+## Возможности
 
-# Последние 100 сообщений (быстрый тест)
-tg-exporter export run --chat @channel_name --last 100
+- **Экспорт в JSON или Markdown** — вся история сообщений с метаданными или в удобном для чтения виде (подходит для Obsidian)
+- **Несколько аккаунтов** — добавил все свои номера один раз, переключаешься между ними в один клик
+- **Транскрипция голосовых и видео-кружков**:
+  - Локально через Faster-Whisper (модели от tiny до large-v3)
+  - Облачно через Deepgram (nova-3, быстро и точно)
+- **Скачивание медиа** — фото, видео, голосовые, документы раскладываются по папкам
+- **Фильтры**: период (неделя / месяц / свой диапазон), папки Telegram, авторы
+- **Инкрементальный экспорт** — дозабирает только новые сообщения с прошлого раза
+- **Аналитика**: топ авторов и активность по датам
+- **Безопасность**: `api_hash` и сессии хранятся в системном Keyring, не в открытых файлах
+- **Ссылки сохраняются** в JSON и Markdown экспорте
 
-# Последние 7 дней с медиа
-tg-exporter export run --chat @channel_name --days 7 --download-media
+## Интерфейс
+
+Приложение состоит из нескольких экранов:
+
+1. **Окно логина** — ввод API ID/Hash и вход в аккаунт
+2. **Список чатов** — поиск, фильтрация по папкам Telegram, выбор чата для экспорта
+3. **Настройки экспорта** — формат (JSON/Markdown), период, фильтры, медиа, транскрипция
+4. **Прогресс-бар** — отображает ход экспорта с возможностью отмены
+
+## Транскрипция
+
+- **Локальная (Whisper)** — работает офлайн, первый запуск модели скачает её с HuggingFace (от ~75 МБ для `tiny` до ~3 ГБ для `large-v3`). Для `large-v3` желательно 8 ГБ RAM
+- **Deepgram** — нужен API-ключ ([deepgram.com](https://deepgram.com)), ключ вводится в настройках приложения и хранится в Keyring
+
+Ограничение: одно голосовое/кружок не длиннее 15 минут.
+
+## Где приложение хранит файлы
+
+```
+~/.tg_exporter/
+├── config.json              # api_id и настройки (без секретов)
+├── profiles.json            # список аккаунтов (без сессий)
+├── export_history.json      # для инкрементального экспорта
+└── app.log                  # лог приложения
 ```
 
-### Частые сценарии
+Секреты (`api_hash`, сессии, Deepgram key) — в системном Keyring (`tg_exporter`).
 
-| Задача | Команда |
-|--------|---------|
-| Полный экспорт | `tg-exporter export run --chat @name` |
-| Только JSON | `tg-exporter export run --chat @name --format json` |
-| Только Markdown | `tg-exporter export run --chat @name --format markdown` |
-| С медиа | `tg-exporter export run --chat @name --download-media` |
-| С транскрипцией | `tg-exporter export run --chat @name --download-media --transcribe` |
-| С аналитикой | `tg-exporter export run --chat @name --analytics` |
-| Период | `tg-exporter export run --chat @name --days 30` |
-| Диапазон дат | `tg-exporter export run --chat @name --date-from 2024-01-01 --date-to 2024-06-01` |
-| Последние N | `tg-exporter export run --chat @name --last 500` |
-| Продолжить | `tg-exporter export run --chat @name --resume` |
-| Все чаты из конфига | `tg-exporter export run --all --skip-unavailable` |
+## Структура экспорта
 
-Полный справочник команд: [references/commands.md](references/commands.md).
-Детальные сценарии и структура вывода: [references/export_workflows.md](references/export_workflows.md).
+После экспорта в выбранной директории создаётся:
 
-## Поиск чатов
-
-```bash
-# Список всех чатов
-tg-exporter chats list
-
-# Поиск по названию
-tg-exporter chats list --search "кот"
-
-# По папкам Telegram
-tg-exporter chats list --folder "Работа"
-
-# Только список папок
-tg-exporter chats list --folders
-
-# Информация о чате
-tg-exporter chats show --chat -1001234567890
-
-# Добавить чат в конфиг (для массового экспорта)
-tg-exporter chats add --chat -1001234567890
 ```
-
-## Профили (несколько аккаунтов)
-
-```bash
-tg-exporter profile list
-tg-exporter profile add --phone +7999... --api-id 12345 --api-hash abc --name "Рабочий"
-tg-exporter profile switch --phone +7999...
+<output>/
+├── result.json              # Полный JSON со всеми сообщениями
+├── _part_1.md               # Markdown, часть 1
+├── _part_2.md               # Markdown, часть 2 (если >лимита слов)
+├── media/
+│   ├── photos/              # Фото (.jpg, .png)
+│   ├── videos/              # Видео и кружки (.mp4)
+│   ├── voices/              # Голосовые (.ogg)
+│   ├── documents/           # Документы
+│   └── stickers/            # Стикеры (.webp)
+├── top_authors.md           # Аналитика: топ авторов (опционально)
+├── activity.md              # Аналитика: активность по датам (опционально)
+└── export_history.json      # Для инкрементального экспорта
 ```
-
-## Конфигурация
-
-```bash
-tg-exporter config show
-tg-exporter config init --force   # создать/обновить config.json
-tg-exporter config path           # где лежит config.json
-```
-
-## Диагностика
-
-```bash
-tg-exporter doctor
-```
-
-## Важные замечания
-
-### Безопасность
-- `secrets.exported.env` (из `auth export-session`) содержит полный доступ к аккаунту. Никогда не читать его содержимое в контекст LLM, не коммитить, не отправлять.
-- API Hash, код из Telegram, пароль 2FA — не сохранять в логах и истории. Пользователь вводит их интерактивно.
-- Файлы экспорта могут содержать личные данные. Не отправлять их содержимое в LLM-контекст без явного запроса пользователя.
-
-### Технические ограничения
-- Экспорт больших каналов может занять часы и десятки гигабайт
-- `--last` несовместим с фильтрами по дате
-- `--days` несовместим с `--date-from/--date-to`
-
-### Провайдеры транскрипции
-- `local` (по умолчанию) — Faster-Whisper, работает оффлайн, требует CPU/GPU
-- `deepgram` — требует `DEEPGRAM_API_KEY` в переменных окружения
-
-### После экспорта
-Сообщить пользователю:
-- Путь к директории с результатами
-- Какие файлы созданы
-- Размер выгрузки (если доступен)

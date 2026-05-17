@@ -1,15 +1,15 @@
 # Telegram Exporter Skill
 
-Скилл для AI-агентов (OpenClaw, Cursor, Claude, OpenCode и др.) для экспорта данных из Telegram-каналов и чатов через консольную утилиту [tg-exporter](https://github.com/MrDerunov/telegram-exporter).
+Скилл для AI-агентов (OpenClaw, Cursor, Claude и др.) для экспорта данных из Telegram-каналов и чатов через десктопное приложение [Telegram Exporter](https://github.com/MrDerunov/telegram-exporter).
 
-## Что умеет скилл
+## Что такое Telegram Exporter
 
-- Автоматически проверяет наличие `tg-exporter` и устанавливает при необходимости
-- Проверяет готовность окружения (авторизация, конфиг, ffmpeg)
-- Экспорт чатов в JSON и Markdown с фильтрами по датам и объёму
-- Скачивание медиа, транскрипция голосовых, сбор аналитики
-- Массовый экспорт всех чатов из конфига
-- Инкрементальный экспорт (только новые сообщения)
+Десктопное приложение с графическим интерфейсом (tkinter/customtkinter) для:
+- Экспорта чатов и каналов в JSON и Markdown
+- Транскрипции голосовых сообщений (Whisper / Deepgram)
+- Скачивания медиа (фото, видео, документы)
+- Аналитики (топ авторов, активность по датам)
+- Работы с несколькими аккаунтами
 
 ## Установка
 
@@ -23,23 +23,27 @@ openclaw skill install MrDerunov/telegram-exporter-skill
 
 ## Требования
 
-- Утилита [tg-exporter](https://github.com/MrDerunov/telegram-exporter) (скачивается автоматически при первом использовании скилла)
+- Приложение [Telegram Exporter](https://github.com/MrDerunov/telegram-exporter/releases) (скачать бинарник под свою ОС)
 - Учётная запись Telegram с API ID и API Hash (my.telegram.org)
+- Python 3.11+ (если запуск из исходников)
+- Для работы из РФ — VPN с полным туннелированием
 
 ## Структура
 
 ```
 ├── SKILL.md                         # Основной файл скилла
 ├── scripts/
-│   ├── install_tg_exporter.sh       # Автоустановка tg-exporter
 │   ├── package_skill.py             # Упаковка скилла в .skill
 │   └── quick_validate.py            # Валидация скилла
 └── references/
-    ├── commands.md                  # Полный справочник команд
     ├── auth_guide.md                # Гайд по авторизации
     └── export_workflows.md          # Типовые сценарии экспорта
 ```
 
+## Версия
+
+Актуальная версия приложения: **v2.0.4**
+
 ## Лицензия
 
-MIT — см. [LICENSE](LICENSE) в репозитории [tg-exporter](https://github.com/MrDerunov/telegram-exporter).
+MIT — см. [LICENSE](LICENSE) в репозитории [telegram-exporter](https://github.com/MrDerunov/telegram-exporter).
