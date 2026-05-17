@@ -40,6 +40,10 @@ openclaw skill install MrDerunov/telegram-exporter-skill
     └── export_workflows.md          # Типовые сценарии экспорта
 ```
 
+## Версия
+
+Актуальная версия: **v1.0.5** — [GitHub Releases](https://github.com/MrDerunov/telegram-exporter/releases)
+
 ## Лицензия
 
 MIT — см. [LICENSE](LICENSE) в репозитории [tg-exporter](https://github.com/MrDerunov/telegram-exporter).
