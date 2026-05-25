@@ -42,7 +42,7 @@ openclaw skill install MrDerunov/telegram-exporter-skill
 
 ## Версия
 
-Актуальная версия: **v1.0.5** — [GitHub Releases](https://github.com/MrDerunov/telegram-exporter/releases)
+Актуальная версия: **v1.0.11** — [GitHub Releases](https://github.com/MrDerunov/telegram-exporter/releases)
 
 ## Лицензия
 
